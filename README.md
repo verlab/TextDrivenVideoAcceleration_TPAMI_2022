@@ -65,7 +65,7 @@ We provide convinient demos in CoLab.
 |            **Description**     |  **Link**                     |
 |--------------------------------|-------------------------------|
 | Process a video using our agent | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/verlab/TextDrivenVideoAcceleration_TPAMI_2022/blob/main/TextDrivenVideoAcceleration_TPAMI_2022.ipynb) |
-| Train VDAN+ using VaTeX | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/verlab/TextDrivenVideoAcceleration_TPAMI_2022/blob/main/demos/train_VDAN+.ipynb) |
+| Train VDAN+ using VaTeX | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/verlab/TextDrivenVideoAcceleration_TPAMI_2022/blob/main/demos/train_VDAN%2B.ipynb) |
 | Train the agent using YouCook2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/verlab/TextDrivenVideoAcceleration_TPAMI_2022/blob/main/demos/train_SAFFA.ipynb) |
 | Extract VDAN+ feats from a video | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/verlab/TextDrivenVideoAcceleration_TPAMI_2022/blob/main/demos/extract_VDAN%2B_feats.ipynb) |
 
@@ -252,14 +252,14 @@ The training script will save the model in the [semantic_encoding/models](semant
 
     ```bash
     # Download YouCook2's VDAN+ video feats
-    wget -O resources/YouCook2/VDAN+/youcook2_vdan+_vid_feats.zip https://verlab.dcc.ufmg.br/TextDrivenVideoAcceleration/youcook2_vdan+_vid_feats.zip
-    unzip -q resources/YouCook2/VDAN+/youcook2_vdan+_vid_feats.zip -d resources/YouCook2/VDAN+/vid_feats/
-    rm resources/YouCook2/VDAN+/youcook2_vdan+_vid_feats.zip
+    wget -O rl_fast_forward/resources/YouCook2/VDAN+/youcook2_vdan+_vid_feats.zip https://verlab.dcc.ufmg.br/TextDrivenVideoAcceleration/youcook2_vdan+_vid_feats.zip
+    unzip -q rl_fast_forward/resources/YouCook2/VDAN+/youcook2_vdan+_vid_feats.zip -d rl_fast_forward/resources/YouCook2/VDAN+/vid_feats/
+    rm rl_fast_forward/resources/YouCook2/VDAN+/youcook2_vdan+_vid_feats.zip
     
     # Download YouCook2's VDAN+ document feats
-    wget -O resources/YouCook2/VDAN+/youcook2_vdan+_doc_feats.zip https://verlab.dcc.ufmg.br/TextDrivenVideoAcceleration/youcook2_vdan+_doc_feats.zip
-    unzip -q resources/YouCook2/VDAN+/youcook2_vdan+_doc_feats.zip -d resources/YouCook2/VDAN+/doc_feats/
-    rm resources/YouCook2/VDAN+/youcook2_vdan+_doc_feats.zip
+    wget -O rl_fast_forward/resources/YouCook2/VDAN+/youcook2_vdan+_doc_feats.zip https://verlab.dcc.ufmg.br/TextDrivenVideoAcceleration/youcook2_vdan+_doc_feats.zip
+    unzip -q rl_fast_forward/resources/YouCook2/VDAN+/youcook2_vdan+_doc_feats.zip -d rl_fast_forward/resources/YouCook2/VDAN+/doc_feats/
+    rm rl_fast_forward/resources/YouCook2/VDAN+/youcook2_vdan+_doc_feats.zip
     ```
   
   - If you want to extract them by yourself, you can have a VDAN+ pretrained model by following the instructions in the previous step or downloading a pretrained one we provide [here](https://github.com/verlab/TextDrivenVideoAcceleration_TPAMI_2022/releases/download/pre_release/vdan+_pretrained_model.pth). In terminal, use: 

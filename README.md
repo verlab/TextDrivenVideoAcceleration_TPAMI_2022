@@ -259,11 +259,11 @@ The training script will save the model in the [semantic_encoding/models](semant
     rm resources/YouCook2/VDAN+/youcook2_vdan+_doc_feats.zip
     ```
   
-  - If you want to extract them by yourself, you can have a VDAN+ pretrained model by following the instructions in the previous step or downloading a pretrained one we provide [here](https://verlab.dcc.ufmg.br/TextDrivenVideoAcceleration/vdan+_model_pretrained.pth). In terminal, use: 
+  - If you want to extract them by yourself, you can have a VDAN+ pretrained model by following the instructions in the previous step or downloading a pretrained one we provide [here](https://github.com/verlab/TextDrivenVideoAcceleration_TPAMI_2022/releases/download/pre_release/vdan+_pretrained_model.pth). In terminal, use: 
 
     ```bash
     # Download the pretrained model
-    wget -O semantic_encoding/models/vdan+_model_pretrained.pth https://verlab.dcc.ufmg.br/TextDrivenVideoAcceleration/vdan+_model_pretrained.pth
+    wget -O semantic_encoding/models/vdan+_model_pretrained.pth https://github.com/verlab/TextDrivenVideoAcceleration_TPAMI_2022/releases/download/pre_release/vdan+_pretrained_model.pth
     ```
 
   - Now, prepare the data for training...
@@ -284,7 +284,7 @@ The training script will save the model in the [semantic_encoding/models](semant
 Inference
 ---
 
-  - You can test the agent using a [saved model](https://verlab.dcc.ufmg.br/TextDrivenVideoAcceleration/saffa_vdan+_model.pth) as follows:
+  - You can test the agent using a [saved model](https://github.com/verlab/TextDrivenVideoAcceleration_TPAMI_2022/releases/download/pre_release/youcookii_saffa_model.pth) for the YouCook2 dataset as follows:
 
     ```bash
     python test.py -s ../semantic_encoding/models/vdan+_model_pretrained.pth -m models/saffa_vdan+_model.pth -d YouCook2 -x 12
@@ -318,7 +318,7 @@ Evaluating
 
   - It will display the values in your screen and generate a JSON and a CSV output file formatted as: `/path/to/the/JSON/output/file_results.EXT`
 
-  If you want to reproduce our results, we also provide the selected frames for the compared approaches [here](https://verlab.dcc.ufmg.br/TextDrivenVideoAcceleration/results.zip). It can be downloaded by running:
+  - If you want to reproduce our results, we also provide the selected frames for the compared approaches [here](https://verlab.dcc.ufmg.br/TextDrivenVideoAcceleration/results.zip). It can be downloaded by running:
   
     ```bash    
     wget https://verlab.dcc.ufmg.br/TextDrivenVideoAcceleration/results.zip

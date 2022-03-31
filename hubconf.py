@@ -1,4 +1,4 @@
-dependencies = ['torch', 'torchvision', 'numpy']
+dependencies = ['torch', 'torchvision', 'torchvideo', 'numpy']
 
 from semantic_encoding.utils import init_weights
 from text_driven_video_acceleration import JointModel
@@ -33,8 +33,8 @@ def TextDrivenVideoAcceleration(pretrained=False, progress=False, sent_emb_size=
     model.vdan_plus.apply(init_weights)  # Apply function "init_weights" to all FC layers of our model.
 
     if pretrained:
-        vdan_plus_state_dict = torch.hub.load_state_dict_from_url('https://verlab.dcc.ufmg.br/TextDrivenVideoAcceleration/vdan+_model_pretrained.pth', progress=progress)
-        agent_state_dict = torch.hub.load_state_dict_from_url('https://verlab.dcc.ufmg.br/TextDrivenVideoAcceleration/saffa_vdan+_model.pth', progress=progress)
+        vdan_plus_state_dict = torch.hub.load_state_dict_from_url('https://github.com/verlab/TextDrivenVideoAcceleration_TPAMI_2022/releases/download/pre_release/vdan+_pretrained_model.pth', progress=progress)
+        agent_state_dict = torch.hub.load_state_dict_from_url('https://github.com/verlab/TextDrivenVideoAcceleration_TPAMI_2022/releases/download/pre_release/youcookii_saffa_model.pth', progress=progress)
 
         model.vdan_plus.load_state_dict(vdan_plus_state_dict['model_state_dict'])
         model.policy.load_state_dict(agent_state_dict['policy_state_dict'])

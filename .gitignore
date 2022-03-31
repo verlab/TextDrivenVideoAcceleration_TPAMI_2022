@@ -30,8 +30,6 @@ rl_fast_forward/eval/*.json
 rl_fast_forward/eval/*.npz
 rl_fast_forward/eval/*.txt
 rl_fast_forward/logs/*
-rl_fast_forward/resources/YouCook2/*
-rl_fast_forward/resources/COIN/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

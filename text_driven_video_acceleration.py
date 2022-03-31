@@ -112,9 +112,10 @@ class JointModel(nn.Module):
                 vid_embedding, text_embedding, _, _, _ = self.vdan_plus(transformed_frames, transformed_document, sentences_per_document, words_per_sentence)
 
                 SA_vector = self.Im[int(np.round((np.mean(skips) - desired_speedup) + MAX_SKIP))]
-                action_probs = self.policy(torch.cat([vid_embedding, text_embedding, SA_vector, self.NRPE[frame_idx]], axis=1))
+                observation = torch.cat([vid_embedding, text_embedding, SA_vector.unsqueeze(0), self.NRPE[frame_idx].unsqueeze(0)], axis=1).unsqueeze(0)
+                action_probs = self.policy(observation)
 
-            action = torch.argmax(action_probs).item()
+            action = torch.argmax(action_probs.squeeze(0)).item()
 
             if action == 0:  # Accelerate
                 if acceleration < MAX_ACC:

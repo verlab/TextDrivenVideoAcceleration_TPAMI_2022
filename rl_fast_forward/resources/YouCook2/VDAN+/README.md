@@ -1,0 +1,1 @@
+This folder will store the VDAN+ features extracted from the YouCook2 videos

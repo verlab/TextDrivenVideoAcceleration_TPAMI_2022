@@ -1,0 +1,1 @@
+This folder contains all files from the YouCook2 dataset.

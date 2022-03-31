@@ -65,9 +65,9 @@ We provide convinient demos in CoLab.
 |            **Description**     |  **Link**                     |
 |--------------------------------|-------------------------------|
 | Process a video using our agent | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/verlab/TextDrivenVideoAcceleration_TPAMI_2022/blob/main/TextDrivenVideoAcceleration_TPAMI_2022.ipynb) |
-| Train VDAN+ using VaTeX | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/verlab/TextDrivenVideoAcceleration_TPAMI_2022/blob/main/demos/train_VDAN.ipynb) |
+| Train VDAN+ using VaTeX | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/verlab/TextDrivenVideoAcceleration_TPAMI_2022/blob/main/demos/train_VDAN+.ipynb) |
 | Train the agent using YouCook2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/verlab/TextDrivenVideoAcceleration_TPAMI_2022/blob/main/demos/train_SAFFA.ipynb) |
-| Extract VDAN+ feats from a video | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/verlab/TextDrivenVideoAcceleration_TPAMI_2022/blob/main/demos/extract_VDAN+_feats.ipynb) |
+| Extract VDAN+ feats from a video | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/verlab/TextDrivenVideoAcceleration_TPAMI_2022/blob/main/demos/extract_VDAN%2B_feats.ipynb) |
 
 
 Data \& Code Preparation

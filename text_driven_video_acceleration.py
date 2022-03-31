@@ -83,8 +83,8 @@ class JointModel(nn.Module):
         frame_idx = 0
         selected_frames = []
 
-        self.Im = torch.eye(self.q)
-        self.NRPE = self.get_NRPE(num_frames)
+        self.Im = torch.eye(self.q).to(device)
+        self.NRPE = self.get_NRPE(num_frames).to(device)
 
         curr_frames = [None for _ in range(MAX_FRAMES)]
         skips = [skip]

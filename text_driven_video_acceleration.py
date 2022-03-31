@@ -144,7 +144,7 @@ class JointModel(nn.Module):
         return 1/np.power(F, 2*k/self.q)
 
     def get_NRPE(self, F):
-        wks = np.array([self.get_wk(F, k, self.q) for k in range(self.q//2)])
+        wks = np.array([self.get_wk(F, k) for k in range(self.q//2)])
         NRPE = np.zeros((F, self.q), dtype=np.float32)
         even_idxs = np.array([2*k for k in range(self.q//2)])
         odd_idxs = even_idxs+1

@@ -108,7 +108,7 @@ class JointModel(nn.Module):
                 cv2.putText(curr_frames[0], '{}x'.format(skip), (50, 50), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
                 output_video.write(curr_frames[0])
 
-            with torch.no_grad:
+            with torch.no_grad():
                 img_embedding, text_embedding, _, _ = self.vdan_plus(transformed_frames, transformed_document, sentences_per_document, words_per_sentence)
 
                 SA_vector = self.Im[int(np.round((np.mean(skips) - desired_speedup) + MAX_SKIP))]

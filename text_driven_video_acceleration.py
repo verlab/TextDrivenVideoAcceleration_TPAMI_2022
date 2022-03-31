@@ -109,10 +109,10 @@ class JointModel(nn.Module):
                 output_video.write(curr_frames[0])
 
             with torch.no_grad():
-                img_embedding, text_embedding, _, _ = self.vdan_plus(transformed_frames, transformed_document, sentences_per_document, words_per_sentence)
+                vid_embedding, text_embedding, _, _, _ = self.vdan_plus(transformed_frames, transformed_document, sentences_per_document, words_per_sentence)
 
                 SA_vector = self.Im[int(np.round((np.mean(skips) - desired_speedup) + MAX_SKIP))]
-                action_probs = self.policy(torch.cat([img_embedding, text_embedding, SA_vector, self.NRPE[frame_idx]], axis=1))
+                action_probs = self.policy(torch.cat([vid_embedding, text_embedding, SA_vector, self.NRPE[frame_idx]], axis=1))
 
             action = torch.argmax(action_probs).item()
 

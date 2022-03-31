@@ -48,7 +48,10 @@ model.cuda()
 model.eval()
 
 document = ['sentence_1', 'sentence_2', ..., 'sentence_N'] # Document of N sentences that will guide the agent semantically
-sf = model.fast_forward_video('video_filename.mp4', document, 'output_filename.avi') # Returns the selected frames
+sf = model.fast_forward_video(video_filename='video_filename.mp4',
+                              document=document,
+                              desired_speedup=12,
+                              output_video_filename='output_filename.avi') # Returns the selected frames
 
 print('Selected Frames: ', sf)
 ```

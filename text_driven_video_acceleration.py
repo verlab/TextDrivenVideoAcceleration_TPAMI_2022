@@ -87,7 +87,7 @@ class JointModel(nn.Module):
         self.NRPE = self.get_NRPE(num_frames)
 
         curr_frames = [None for _ in range(MAX_FRAMES)]
-        skips = []
+        skips = [skip]
         pbar = tqdm(total=num_frames)
         while frame_idx < num_frames:
             video.set(1, frame_idx)

@@ -245,10 +245,7 @@ def validate(validation_dataloader, validation_data, model, criterion, epoch, wr
 
 def main(model_params, train_params):
 
-    if not os.path.isdir(train_params['log_folder']):
-        print('Log folder "{}" does not exist. We are attempting creating it... '.format(train_params['log_folder']))
-        os.mkdir(train_params['log_folder'])
-        print('Folder created!')
+    os.makedirs(train_params['log_folder'], exist_ok=True)
 
     if train_params['model_checkpoint_filename']:
         print('[{}] Loading saved model weights to finetune (or continue training): {}...'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), train_params['model_checkpoint_filename']))

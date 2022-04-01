@@ -82,10 +82,7 @@ def save_checkpoint(epoch, model, optimizer, word_map, datetimestamp, model_para
              'model_params': model_params,
              'train_params': train_params}
 
-    if not os.path.isdir(train_params['checkpoint_folder']):
-        print('Folder "{}" does not exist. We are attempting creating it... '.format(train_params['checkpoint_folder']))
-        os.mkdir(train_params['checkpoint_folder'])
-        print('Folder created!')
+    os.makedirs(train_params['checkpoint_folder'], exist_ok=True)
 
     if train_params['model_checkpoint_filename']:
         filename = '{}/{}_checkpoint_lr{}_{}eps{}{}_{}_{}_ft{}.pth'.format(train_params['checkpoint_folder'], datetimestamp, train_params['learning_rate'], train_params['num_epochs'], '_w-att' if model_params['use_word_level_attention'] else '', '_s-att' if model_params['use_sentence_level_attention'] else '', train_params['hostname'], train_params['username'], train_params['model_checkpoint_filename'].split('/')[-1].split('.')[0])

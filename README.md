@@ -138,8 +138,12 @@ If you want to download the code and run it by yourself in your environment, or 
     tar -xf rl_fast_forward/resources/YouCook2/scripts.tar.gz -C rl_fast_forward/resources/YouCook2/
     rm rl_fast_forward/resources/YouCook2/scripts.tar.gz
 
+    wget -O rl_fast_forward/resources/YouCook2/splits.tar.gz http://youcook2.eecs.umich.edu/static/YouCookII/splits.tar.gz
+    tar -xf rl_fast_forward/resources/YouCook2/splits.tar.gz -C rl_fast_forward/resources/YouCook2/
+    rm rl_fast_forward/resources/YouCook2/splits.tar.gz
+
     # Install youtube-dl and download the available videos
-    pip install youtube_dl
+    pip install youtube_dl # PS.: The YouTube-DL have been slow lately. If your download speed is under 100KiB/s, consider changing it to the YT-DLP fork (https://github.com/yt-dlp/yt-dlp)
     cd rl_fast_forward/resources/YouCook2/scripts
     python download_youcookii_videos.py
     ```

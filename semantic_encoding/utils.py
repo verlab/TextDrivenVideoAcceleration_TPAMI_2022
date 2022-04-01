@@ -97,11 +97,14 @@ def save_checkpoint(epoch, model, optimizer, word_map, datetimestamp, model_para
     print('\t[{}] Done!\n'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
 
-def load_checkpoint(filename, is_vdan=False):
+def load_checkpoint(filename_or_url, is_vdan=False, load_from_url=False, progress=False):
     """
     Load model checkpoint.
     """
-    checkpoint = torch.load(filename, map_location=device)
+    if load_from_url:
+        checkpoint = torch.hub.load_state_dict_from_url(filename_or_url, progress=progress)
+    else:
+        checkpoint = torch.load(filename_or_url, map_location=device)
 
     epoch = checkpoint['epoch']
     word_map = checkpoint['word_map']
@@ -179,7 +182,7 @@ def computeMRR(X, Y):
 
     return MRR
 
-def extract_vdan_plus_feats(model, train_params, model_params, word_map, video_filename, document_filename, batch_size, max_frames, use_vid_transformer=False, tqdm_leave=True):
+def extract_vdan_plus_feats(model, train_params, model_params, word_map, video_filename, document_filename, batch_size, max_frames, tqdm_leave=True):
     # Load inputs
     document = np.loadtxt(document_filename, delimiter='\n', dtype=str, encoding='utf-8')
 

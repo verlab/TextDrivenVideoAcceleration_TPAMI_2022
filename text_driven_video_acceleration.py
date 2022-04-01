@@ -1,37 +1,29 @@
+import os
+import cv2
 import torch
 import torch.nn as nn
-import json
-import cv2
-import os
 import numpy as np
-import torchvideo.transforms as VT
-from torchvision.transforms import Compose
 from tqdm import tqdm
 from semantic_encoding.models import VDAN_PLUS
-from semantic_encoding.utils import convert_sentences_to_word_idxs
+from semantic_encoding.utils import load_checkpoint, extract_vdan_plus_feats
 from rl_fast_forward.REINFORCE.policy import Policy
 from rl_fast_forward.REINFORCE.critic import Critic
-
-KINECTS400_MEAN = [0.43216, 0.394666, 0.37645]
-KINECTS400_STD = [0.22803, 0.22145, 0.216989]
 
 MIN_SKIP = 1
 MAX_SKIP = 25
 MAX_ACC = 5
 MIN_ACC = 1
-MAX_FRAMES = 32
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class JointModel(nn.Module):
-    def __init__(
-            self, vocab_size, doc_emb_size, sent_emb_size, word_emb_size, sent_rnn_layers, word_rnn_layers, hidden_feat_emb_size, final_feat_emb_size,
+    def __init__(self, vocab_size, doc_emb_size, sent_emb_size, word_emb_size, sent_rnn_layers, word_rnn_layers, hidden_feat_emb_size, final_feat_emb_size,
             sent_att_size, word_att_size, use_visual_shortcut=False, use_sentence_level_attention=False, use_word_level_attention=False,
-            learn_first_hidden_vector=True, action_size=3):
+            learn_first_hidden_vector=True, action_size=3, pretrained=False, progress=False):
         super(JointModel, self).__init__()
 
         self.vdan_plus = VDAN_PLUS(vocab_size=vocab_size,
-                                   doc_emb_size=doc_emb_size,  # ResNet-50 embedding size
+                                   doc_emb_size=doc_emb_size,  # R(2+1)D embedding size
                                    sent_emb_size=sent_emb_size,
                                    word_emb_size=word_emb_size,  # GloVe embeddings size
                                    sent_rnn_layers=sent_rnn_layers,
@@ -51,69 +43,70 @@ class JointModel(nn.Module):
 
         self.policy = Policy(state_size=self.state_size, action_size=action_size)
         self.critic = Critic(state_size=self.state_size)
+                
+        if pretrained:                        
+            _, vdan_plus_model, _, vdan_plus_word_map, vdan_plus_model_params, vdan_plus_train_params = load_checkpoint('https://github.com/verlab/TextDrivenVideoAcceleration_TPAMI_2022/releases/download/pre_release/vdan+_pretrained_model.pth', load_from_url=True, progress=progress)
+                            
+            self.vdan_plus_data = {
+                'model_name': 'vdan+_pretrained_model',
+                'semantic_encoder_model': vdan_plus_model,
+                'word_map': vdan_plus_word_map,
+                'train_params': vdan_plus_train_params,
+                'model_params': vdan_plus_model_params,
+                'input_frames_length': 32        
+            }
+            
+            self.vdan_plus = vdan_plus_model
+            
+            agent_state_dict = torch.hub.load_state_dict_from_url('https://github.com/verlab/TextDrivenVideoAcceleration_TPAMI_2022/releases/download/pre_release/youcookii_saffa_model.pth', progress=progress)
+            self.policy.load_state_dict(agent_state_dict['policy_state_dict'])
 
-    def fast_forward_video(self, video_filename, document, desired_speedup, output_video_filename=None, max_words=20):
-        word_map = json.load(open(f'{os.path.dirname(os.path.abspath(__file__))}/semantic_encoding/resources/glove6B_word_map.json'))
+    def fast_forward_video(self, video_filename, document, desired_speedup, output_video_filename=None, vdan_plus_batch_size=16, semantic_embeddings=None):
         
-        vid_transformer = Compose([
-            VT.NDArrayToPILVideo(),
-            VT.ResizeVideo(112),
-            VT.PILVideoToTensor(),
-            VT.NormalizeVideo(mean=KINECTS400_MEAN, std=KINECTS400_STD)
-        ])
-
-        converted_sentences, words_per_sentence = convert_sentences_to_word_idxs(document, max_words, word_map)
-        sentences_per_document = np.array([converted_sentences.shape[0]])
-
-        transformed_document = torch.from_numpy(converted_sentences).unsqueeze(0).to(device)  # (batch_size, sentence_limit, word_limit)
-        sentences_per_document = torch.from_numpy(sentences_per_document).to(device)  # (batch_size)
-        words_per_sentence = torch.from_numpy(words_per_sentence).unsqueeze(0).to(device)  # (batch_size, sentence_limit)
-
-        video = cv2.VideoCapture(video_filename)
+        if semantic_embeddings is None:
+            semantic_embeddings = self.get_semantic_embeddings(video_filename, document, vdan_plus_batch_size).unsqueeze(0)
+            
+        semantic_embeddings = semantic_embeddings.to(device)
+        
         if output_video_filename:
+            video = cv2.VideoCapture(video_filename)
             fourcc = cv2.VideoWriter_fourcc('M', 'P', 'E', 'G')
             fps = video.get(5)
             frame_width = int(video.get(3))
             frame_height = int(video.get(4))
             output_video = cv2.VideoWriter(output_video_filename, fourcc, fps, (frame_width, frame_height))
 
-        num_frames = int(video.get(7))
         acceleration = 1
         skip = 1
         frame_idx = 0
-        selected_frames = []
-
+        selected_frames = []        
+        num_frames = semantic_embeddings.shape[0]
+        
         self.Im = torch.eye(self.q).to(device)
         self.NRPE = self.get_NRPE(num_frames).to(device)
 
-        curr_frames = [None for _ in range(MAX_FRAMES)]
         skips = [skip]
         pbar = tqdm(total=num_frames)
         while frame_idx < num_frames:
-            video.set(1, frame_idx)
-            for i in range(MAX_FRAMES):
-                ret, frame = video.read()
+            if output_video_filename:
+                i = 0
+                while i < skip and frame_idx < num_frames:
+                    ret, frame = video.read()
+                    i += 1
 
                 if not ret:
-                    curr_frames[i] = np.zeros((int(video.get(4)), int(video.get(3)), 3), dtype=np.uint8)
-                    continue
+                    print('Error reading frame: {}'.format(frame_idx))
+                    break
                 
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                curr_frames[i] = frame
-                
-            transformed_frames = vid_transformer(curr_frames).unsqueeze(0).to(device)
-            
-            if output_video_filename:
                 font = cv2.FONT_HERSHEY_SIMPLEX
-                cv2.putText(curr_frames[0], '{}x'.format(skip), (50, 50), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
-                output_video.write(curr_frames[0])
+                cv2.putText(frame, '{}x'.format(skip), (50, 50), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                output_video.write(frame)
 
-            with torch.no_grad():
-                vid_embedding, text_embedding, _, _, _ = self.vdan_plus(transformed_frames, transformed_document, sentences_per_document, words_per_sentence)
-
-                SA_vector = self.Im[int(np.round((np.mean(skips) - desired_speedup) + MAX_SKIP))]
-                observation = torch.cat([vid_embedding, text_embedding, SA_vector.unsqueeze(0), self.NRPE[frame_idx].unsqueeze(0)], axis=1).unsqueeze(0)
-                action_probs = self.policy(observation)
+            observation = torch.cat((semantic_embeddings[frame_idx],
+                                     self.NRPE[frame_idx],
+                                     self.Im[int(np.round((np.mean(skips) - desired_speedup) + MAX_SKIP))])).unsqueeze(0)
+            
+            action_probs = self.policy(observation.unsqueeze(0))
 
             action = torch.argmax(action_probs.squeeze(0)).item()
 
@@ -154,3 +147,14 @@ class JointModel(nn.Module):
             NRPE[-(t+1), odd_idxs] = np.cos(wks*t)
 
         return torch.from_numpy(NRPE)
+
+    def get_semantic_embeddings(self, video_filename, document, vdan_plus_batch_size=16):
+        
+        temp_doc_filename = f'{os.path.basename(os.path.abspath(video_filename)).split(".")[0]}.txt'
+        np.savetxt(temp_doc_filename, document, fmt='%s')
+        
+        vid_embeddings, doc_embeddings, _, _, _ = extract_vdan_plus_feats(self.vdan_plus_data['semantic_encoder_model'], self.vdan_plus_data['train_params'], self.vdan_plus_data['model_params'], self.vdan_plus_data['word_map'], video_filename, temp_doc_filename, vdan_plus_batch_size, self.vdan_plus_data['input_frames_length'])
+        
+        os.remove(temp_doc_filename)
+        
+        return torch.from_numpy(np.concatenate([doc_embeddings, vid_embeddings], axis=1))

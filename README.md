@@ -2,7 +2,7 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/verlab/TextDrivenVideoAcceleration_TPAMI_2022/blob/main/TextDrivenVideoAcceleration_TPAMI_2022.ipynb)
 
 <b>Text-Driven Video Acceleration: A Weakly-Supervised Reinforcement Learning Method</b>
-<br>[[Project Page]](https://www.verlab.dcc.ufmg.br/semantic-hyperlapse/tpami2022) [[Paper]](https://doi.org/10.1109/TPAMI.2022.3157198) [[Video]](https://www.youtube.com/watch?v=_CfuKjdZUlE&t)
+<br>[[Project Page]](https://www.verlab.dcc.ufmg.br/semantic-hyperlapse/tpami2023) [[Paper]](https://doi.org/10.1109/TPAMI.2022.3157198) [[Video]](https://www.youtube.com/watch?v=_CfuKjdZUlE&t)
 ===
 
 ![](./assets/methodology.png)

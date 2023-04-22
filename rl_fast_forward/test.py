@@ -204,7 +204,7 @@ if __name__ == "__main__":
 
     elif args.dataset:
         
-        experiments = np.array(Experiment2VideoMapping.get_dataset_experiments(args.dataset, cvpr2020_subset=args.cvpr2020_subset))[:10]
+        experiments = np.array(Experiment2VideoMapping.get_dataset_experiments(args.dataset, cvpr2020_subset=args.cvpr2020_subset))
         random.shuffle(experiments)
 
         annotations = json.load(open(config.annotations_filenames[args.dataset]))

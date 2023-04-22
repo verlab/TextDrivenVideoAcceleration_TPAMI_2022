@@ -15,7 +15,7 @@ We present a novel weakly-supervised methodology based on a reinforcement learni
 If you find this code useful for your research, please cite the paper:
 
 ```
-@ARTICLE{Ramos_2022_TPAMI,
+@ARTICLE{Ramos_2023_TPAMI,
   author={Ramos, Washington and Silva, Michel and Araujo, Edson and Moura, Victor and Oliveira, Keller and Marcolino, Leandro Soriano and Nascimento, Erickson R.},
   journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
   title={Text-Driven Video Acceleration: A Weakly-Supervised Reinforcement Learning Method}, 

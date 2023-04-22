@@ -188,18 +188,18 @@ class Experiment2VideoMapping(object):
                 
                 available_experiments = set([fname.split('/')[-1] for fname in glob(f'{os.path.dirname(os.path.dirname(os.path.dirname(__file__)))}/rl_fast_forward/resources/YouCook2/raw_videos/*/*/*') if len(fname.split('/')[-1].split('.')) == 1])
                 
-                experiments = set(experiments).intersection(available_experiments)
+                experiments = list(set(experiments).intersection(available_experiments))
         
         elif dataset_name == 'VaTeX':
             vals = json.load(open(f'{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}/resources/vatex_validation_v1.0.json'))
-            experiments = set([val['videoID'] for val in vals])  # Validation videos
+            experiments = list(set([val['videoID'] for val in vals]))  # Validation videos
 
         elif dataset_name == 'COIN':
             experiments = set(pd.read_csv(f'{os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))}/rl_fast_forward/resources/COIN/metadata.csv')['vid_id'].tolist())
             
             available_experiments = set([fname.split('/')[-1].split('.mp4')[0] for fname in glob(f'{os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))}/rl_fast_forward/resources/COIN/videos/*/*mp4')])
                 
-            experiments = set(experiments).intersection(available_experiments)
+            experiments = list(set(experiments).intersection(available_experiments))
             
         return experiments
 

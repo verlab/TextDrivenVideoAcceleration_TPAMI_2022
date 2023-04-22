@@ -16,13 +16,13 @@ If you find this code useful for your research, please cite the paper:
 
 ```
 @ARTICLE{Ramos_2022_TPAMI,
-  author={W. {Ramos} and M. {Silva} and E. {Araujo} and V. {Moura} and K. {Oliveira} L. S. {Marcolino} and E. {Nascimento}},
+  author={Ramos, Washington and Silva, Michel and Araujo, Edson and Moura, Victor and Oliveira, Keller and Marcolino, Leandro Soriano and Nascimento, Erickson R.},
   journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
-  title={Text-driven video acceleration: A weakly-supervised reinforcement learning method}, 
-  year={2022},
-  volume={},
-  number={},
-  pages={1-1},
+  title={Text-Driven Video Acceleration: A Weakly-Supervised Reinforcement Learning Method}, 
+  year={2023},
+  volume={45},
+  number={2},
+  pages={2492-2504},
   doi={10.1109/TPAMI.2022.3157198}}
 ```
 
